@@ -1,0 +1,69 @@
+{
+  "kind": "collectionType",
+  "collectionName": "products",
+  "info": {
+    "singularName": "product",
+    "pluralName": "products",
+    "displayName": "Products",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "slug": {
+      "type": "uid",
+      "required": true
+    },
+    "cover_image": {
+      "type": "media",
+      "multiple": true,
+      "required": true,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "description": {
+      "type": "text",
+      "required": true
+    },
+    "category": {
+      "type": "enumeration",
+      "enum": [
+        "Ready to use Powder",
+        "To be Cooked Powder",
+        "Pickels",
+        "Millets",
+        "Snacks"
+      ],
+      "required": true,
+      "default": "Ready to use Powder"
+    },
+    "quantity": {
+      "type": "string",
+      "required": false
+    },
+    "price": {
+      "type": "json",
+      "required": true
+    },
+    "offer_percentage": {
+      "type": "integer",
+      "min": 0,
+      "max": 100
+    },
+    "current_price": {
+      "type": "json"
+    },
+    "availability": {
+      "type": "boolean",
+      "default": true,
+      "required": true
+    }
+  }
+}
