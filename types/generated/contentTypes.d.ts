@@ -463,9 +463,10 @@ export interface ApiProductProduct extends Struct.CollectionTypeSchema {
       [
         'Ready to use Powder',
         'To be Cooked Powder',
-        'Pickels',
+        'Pickles',
         'Millets',
         'Snacks',
+        'Health Premixes',
       ]
     > &
       Schema.Attribute.Required &
@@ -483,6 +484,7 @@ export interface ApiProductProduct extends Struct.CollectionTypeSchema {
       'api::product.product'
     > &
       Schema.Attribute.Private;
+    nutrition: Schema.Attribute.Text;
     offer_percentage: Schema.Attribute.Integer &
       Schema.Attribute.SetMinMax<
         {

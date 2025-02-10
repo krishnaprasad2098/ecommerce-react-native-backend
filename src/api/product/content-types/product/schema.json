@@ -37,9 +37,10 @@
       "enum": [
         "Ready to use Powder",
         "To be Cooked Powder",
-        "Pickels",
+        "Pickles",
         "Millets",
-        "Snacks"
+        "Snacks",
+        "Health Premixes"
       ],
       "required": true,
       "default": "Ready to use Powder"
@@ -64,6 +65,9 @@
       "type": "boolean",
       "default": true,
       "required": true
+    },
+    "nutrition": {
+      "type": "text"
     }
   }
 }
