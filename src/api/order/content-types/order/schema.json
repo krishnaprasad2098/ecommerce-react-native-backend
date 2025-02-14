@@ -4,7 +4,8 @@
   "info": {
     "singularName": "order",
     "pluralName": "orders",
-    "displayName": "order"
+    "displayName": "order",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
@@ -21,7 +22,8 @@
     },
     "orderId": {
       "type": "uid",
-      "required": true
+      "required": true,
+      "targetField": "phone"
     },
     "paymentInfo": {
       "type": "json"
@@ -31,7 +33,8 @@
       "required": true
     },
     "isDelivered": {
-      "type": "boolean"
+      "type": "boolean",
+      "default": false
     },
     "address": {
       "type": "text",

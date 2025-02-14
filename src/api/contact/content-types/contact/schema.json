@@ -4,7 +4,8 @@
   "info": {
     "singularName": "contact",
     "pluralName": "contacts",
-    "displayName": "contact"
+    "displayName": "contact",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
@@ -17,7 +18,8 @@
     },
     "email": {
       "type": "email",
-      "required": true
+      "required": true,
+      "unique": true
     },
     "phone_number": {
       "type": "string",

@@ -372,6 +372,7 @@ export interface AdminUser extends Struct.CollectionTypeSchema {
 export interface ApiContactContact extends Struct.CollectionTypeSchema {
   collectionName: 'contacts';
   info: {
+    description: '';
     displayName: 'contact';
     pluralName: 'contacts';
     singularName: 'contact';
@@ -383,7 +384,9 @@ export interface ApiContactContact extends Struct.CollectionTypeSchema {
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    email: Schema.Attribute.Email & Schema.Attribute.Required;
+    email: Schema.Attribute.Email &
+      Schema.Attribute.Required &
+      Schema.Attribute.Unique;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
@@ -408,6 +411,7 @@ export interface ApiContactContact extends Struct.CollectionTypeSchema {
 export interface ApiOrderOrder extends Struct.CollectionTypeSchema {
   collectionName: 'orders';
   info: {
+    description: '';
     displayName: 'order';
     pluralName: 'orders';
     singularName: 'order';
@@ -422,12 +426,12 @@ export interface ApiOrderOrder extends Struct.CollectionTypeSchema {
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     email: Schema.Attribute.Email & Schema.Attribute.Required;
-    isDelivered: Schema.Attribute.Boolean;
+    isDelivered: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<'oneToMany', 'api::order.order'> &
       Schema.Attribute.Private;
     name: Schema.Attribute.String & Schema.Attribute.Required;
-    orderId: Schema.Attribute.UID & Schema.Attribute.Required;
+    orderId: Schema.Attribute.UID<'phone'> & Schema.Attribute.Required;
     paymentInfo: Schema.Attribute.JSON;
     phone: Schema.Attribute.Text &
       Schema.Attribute.Required &
