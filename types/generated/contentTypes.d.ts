@@ -425,6 +425,7 @@ export interface ApiOrderOrder extends Struct.CollectionTypeSchema {
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    date: Schema.Attribute.String & Schema.Attribute.Required;
     email: Schema.Attribute.Email & Schema.Attribute.Required;
     isDelivered: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
@@ -445,6 +446,7 @@ export interface ApiOrderOrder extends Struct.CollectionTypeSchema {
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    userId: Schema.Attribute.Integer & Schema.Attribute.Required;
   };
 }
 

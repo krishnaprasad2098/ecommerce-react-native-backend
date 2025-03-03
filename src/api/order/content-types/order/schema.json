@@ -53,6 +53,15 @@
     "amount": {
       "type": "integer",
       "required": true
+    },
+    "userId": {
+      "type": "integer",
+      "required": true,
+      "unique": false
+    },
+    "date": {
+      "type": "string",
+      "required": true
     }
   }
 }
