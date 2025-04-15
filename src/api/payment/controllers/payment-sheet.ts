@@ -9,9 +9,10 @@ export default {
       // Get amount from request body
       const { amount } = ctx.request.body;
       console.log(amount);
+      // console.log(name);
 
       if (!amount || isNaN(amount)) {
-        return ctx.badRequest("Valid amount is required");
+        return ctx.badRequest("Valid amount and name are required");
       }
       const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
       console.log(process.env.STRIPE_SECRET_KEY);
@@ -47,23 +48,25 @@ export default {
         automatic_payment_methods: {
           enabled: true,
         },
+        // name: name,
+        description: "Ashwin Foods Test description.",
       });
 
       console.log(customer, ephemeralKey);
 
       // Return the response
-      //   return {
-      //     paymentIntent: paymentIntent.client_secret,
-      //     ephemeralKey: ephemeralKey.secret,
-      //     customer: customer.id,
-      //     publishableKey: process.env.STRIPE_PUBLIC_KEY,
-      //   };
-      return ctx.send({
+      return {
         paymentIntent: paymentIntent.client_secret,
         ephemeralKey: ephemeralKey.secret,
         customer: customer.id,
         publishableKey: process.env.STRIPE_PUBLIC_KEY,
-      });
+      };
+      // return ctx.send({
+      //   paymentIntent: paymentIntent.client_secret,
+      //   ephemeralKey: ephemeralKey.secret,
+      //   customer: customer.id,
+      //   publishableKey: process.env.STRIPE_PUBLIC_KEY,
+      // });
     } catch (error) {
       ctx.badRequest("Payment sheet creation failed", { error: error.message });
     }
