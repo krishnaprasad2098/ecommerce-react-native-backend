@@ -1,15 +1,16 @@
 /**
  * payment-sheet controller
  */
-// import { Strapi } from 'strapi';
 
 export default {
   async createPaymentSheet(ctx) {
     try {
       // Get amount from request body
-      const { amount } = ctx.request.body;
-      console.log(amount);
-      // console.log(name);
+      const body = ctx.request.body;
+      if (!body || typeof body.amount === "undefined") {
+        return ctx.badRequest("Valid amount and name are required");
+      }
+      const { amount }: { amount: number } = body;
 
       if (!amount || isNaN(amount)) {
         return ctx.badRequest("Valid amount and name are required");
@@ -25,30 +26,24 @@ export default {
         return ctx.internalServerError("Stripe configuration is missing");
       }
 
-      console.log("creating customer");
-
       // Create a customer
       const customer = await stripe.customers.create();
-      console.log("created customer");
 
       // Create ephemeral key
       const ephemeralKey = await stripe.ephemeralKeys.create(
         { customer: customer.id },
-        { apiVersion: "2025-02-24.acacia" }
+        { apiVersion: "2025-03-31.basil" }
       );
-      console.log("ephemeral created");
-
-      console.log("Hit payment intent || payment sheet");
 
       // Create payment intent
       const paymentIntent = await stripe.paymentIntents.create({
         amount: amount ? Math.floor(amount * 100) : 1000,
-        currency: "INR",
+        currency: "inr",
         customer: customer.id,
         automatic_payment_methods: {
           enabled: true,
         },
-        // name: name,
+
         description: "Ashwin Foods Test description.",
       });
 
@@ -61,12 +56,6 @@ export default {
         customer: customer.id,
         publishableKey: process.env.STRIPE_PUBLIC_KEY,
       };
-      // return ctx.send({
-      //   paymentIntent: paymentIntent.client_secret,
-      //   ephemeralKey: ephemeralKey.secret,
-      //   customer: customer.id,
-      //   publishableKey: process.env.STRIPE_PUBLIC_KEY,
-      // });
     } catch (error) {
       ctx.badRequest("Payment sheet creation failed", { error: error.message });
     }
