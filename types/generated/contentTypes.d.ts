@@ -433,7 +433,7 @@ export interface ApiOrderOrder extends Struct.CollectionTypeSchema {
       Schema.Attribute.Private;
     name: Schema.Attribute.String & Schema.Attribute.Required;
     orderId: Schema.Attribute.UID<'phone'> & Schema.Attribute.Required;
-    paymentInfo: Schema.Attribute.JSON;
+    paymentInfo: Schema.Attribute.JSON & Schema.Attribute.Required;
     phone: Schema.Attribute.Text &
       Schema.Attribute.Required &
       Schema.Attribute.SetMinMaxLength<{

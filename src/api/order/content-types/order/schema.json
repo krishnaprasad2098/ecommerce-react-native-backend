@@ -26,7 +26,8 @@
       "targetField": "phone"
     },
     "paymentInfo": {
-      "type": "json"
+      "type": "json",
+      "required": true
     },
     "products": {
       "type": "json",

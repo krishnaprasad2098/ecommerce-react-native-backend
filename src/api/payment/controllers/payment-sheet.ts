@@ -7,12 +7,12 @@ export default {
     try {
       // Get amount from request body
       const body = ctx.request.body;
-      if (!body || typeof body.amount === "undefined") {
+      if (!body || typeof body.amount === "undefined" || !body.name) {
         return ctx.badRequest("Valid amount and name are required");
       }
-      const { amount }: { amount: number } = body;
+      const { amount, name }: { amount: number; name: string } = body;
 
-      if (!amount || isNaN(amount)) {
+      if (!amount || isNaN(amount) || !name || typeof name !== "string") {
         return ctx.badRequest("Valid amount and name are required");
       }
       const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
@@ -25,29 +25,55 @@ export default {
       if (!stripe) {
         return ctx.internalServerError("Stripe configuration is missing");
       }
+      console.log(body.name);
+      console.log(body.amount);
 
       // Create a customer
-      const customer = await stripe.customers.create();
+      const customer = await stripe.customers.create({
+        name: body.name,
+        address: {
+          line1: "510 Townsend St",
+          postal_code: "98140",
+          city: "San Francisco",
+          state: "CA",
+          country: "US",
+        },
+      });
+
+      console.log("created customer");
 
       // Create ephemeral key
       const ephemeralKey = await stripe.ephemeralKeys.create(
         { customer: customer.id },
         { apiVersion: "2025-03-31.basil" }
       );
+      console.log("created ephemeral key");
 
       // Create payment intent
       const paymentIntent = await stripe.paymentIntents.create({
-        amount: amount ? Math.floor(amount * 100) : 1000,
+        amount: body.amount ? Math.floor(body.amount * 100) : 1000,
         currency: "inr",
         customer: customer.id,
-        automatic_payment_methods: {
-          enabled: true,
-        },
+        // automatic_payment_methods: {
+        //   enabled: true,
+        // },
+        payment_method_types: ["card"],
 
         description: "Ashwin Foods Test description.",
+        shipping: {
+          name: body.name,
+          address: {
+            line1: "510 Townsend St",
+            postal_code: "98140",
+            city: "San Francisco",
+            state: "CA",
+            country: "US",
+          },
+        },
       });
 
       console.log(customer, ephemeralKey);
+      console.log("From paymentIntent console.log", paymentIntent.status);
 
       // Return the response
       return {
