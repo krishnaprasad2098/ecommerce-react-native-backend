@@ -10,13 +10,45 @@ export default {
       if (!body || typeof body.amount === "undefined" || !body.name) {
         return ctx.badRequest("Valid amount and name are required");
       }
-      const { amount, name }: { amount: number; name: string } = body;
+      const {
+        amount,
+        name,
+        address,
+        city,
+        state,
+        country,
+        pincode,
+      }: {
+        amount: number;
+        name: string;
+        address: string;
+        city: string;
+        state: string;
+        country: string;
+        pincode: string;
+      } = body;
 
-      if (!amount || isNaN(amount) || !name || typeof name !== "string") {
-        return ctx.badRequest("Valid amount and name are required");
+      if (
+        !amount ||
+        isNaN(amount) ||
+        !name ||
+        typeof name !== "string" ||
+        !address ||
+        typeof address !== "string" ||
+        !city ||
+        typeof city !== "string" ||
+        !state ||
+        typeof state !== "string" ||
+        !country ||
+        typeof country !== "string" ||
+        !pincode ||
+        typeof pincode !== "string"
+      ) {
+        return ctx.badRequest(
+          "Valid amount,name,address,city,state,country,pincode are required"
+        );
       }
       const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
-      console.log(process.env.STRIPE_SECRET_KEY);
       console.log(
         "Using STRIPE_SECRET_KEY:",
         process.env.STRIPE_SECRET_KEY ? "Key exists" : "Key missing"
@@ -25,29 +57,24 @@ export default {
       if (!stripe) {
         return ctx.internalServerError("Stripe configuration is missing");
       }
-      console.log(body.name);
-      console.log(body.amount);
 
       // Create a customer
       const customer = await stripe.customers.create({
         name: body.name,
         address: {
-          line1: "510 Townsend St",
-          postal_code: "98140",
-          city: "San Francisco",
-          state: "CA",
-          country: "US",
+          line1: body.address,
+          postal_code: body.pincode,
+          city: body.city,
+          state: body.state,
+          country: body.country,
         },
       });
-
-      console.log("created customer");
 
       // Create ephemeral key
       const ephemeralKey = await stripe.ephemeralKeys.create(
         { customer: customer.id },
         { apiVersion: "2025-03-31.basil" }
       );
-      console.log("created ephemeral key");
 
       // Create payment intent
       const paymentIntent = await stripe.paymentIntents.create({
@@ -63,17 +90,14 @@ export default {
         shipping: {
           name: body.name,
           address: {
-            line1: "510 Townsend St",
-            postal_code: "98140",
-            city: "San Francisco",
-            state: "CA",
-            country: "US",
+            line1: body.address,
+            postal_code: body.pincode,
+            city: body.city,
+            state: body.state,
+            country: body.country,
           },
         },
       });
-
-      console.log(customer, ephemeralKey);
-      console.log("From paymentIntent console.log", paymentIntent.status);
 
       // Return the response
       return {
