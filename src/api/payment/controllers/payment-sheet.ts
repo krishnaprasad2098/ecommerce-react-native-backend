@@ -49,10 +49,6 @@ export default {
         );
       }
       const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
-      console.log(
-        "Using STRIPE_SECRET_KEY:",
-        process.env.STRIPE_SECRET_KEY ? "Key exists" : "Key missing"
-      );
 
       if (!stripe) {
         return ctx.internalServerError("Stripe configuration is missing");
@@ -85,7 +81,6 @@ export default {
         //   enabled: true,
         // },
         payment_method_types: ["card"],
-
         description: "Ashwin Foods Test description.",
         shipping: {
           name: body.name,
